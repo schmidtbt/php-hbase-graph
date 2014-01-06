@@ -1,0 +1,34 @@
+10
+
+dir
+1890
+svn+ssh://Revan@titan001/svn/kore/trunk/server/backend/lib/kore/framework/hbase
+svn+ssh://Revan@titan001/svn/kore
+
+
+
+2012-06-24T16:06:26.341692Z
+1830
+Revan
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+257e5939-2305-44b3-ac6c-71a7badb9126
+
+base
+dir
+
+crud
+dir
+

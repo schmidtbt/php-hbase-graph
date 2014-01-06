@@ -1,0 +1,63 @@
+<?php
+
+/**
+ * @author Revan
+ */
+abstract class Edge extends GraphEntity {
+    
+    /**
+     *
+     * @var Node
+     */
+    protected $_fromNode;
+    /**
+     *
+     * @var Node
+     */
+    protected $_toNode;
+    
+    /**
+     * @param Node $from
+     * @param Node $to 
+     */
+    public function __construct( Node $from, Node $to ){
+        $key = static::assembleKey($from, $to);
+        $this->from( $from );
+        $this->to( $to );
+        parent::__construct($key);
+    }
+    
+    public function from( Node $from = NULL ){
+        if( is_null( $from ) ){
+            return $this->_fromNode;
+        } else {
+            $this->setFrom($from);
+        }
+    }
+    public function to( Node $to = NULL ){
+        if( is_null( $to ) ){
+            return $this->_toNode;
+        } else {
+            $this->setTo($to);
+        }
+    }
+    
+    protected function setFrom( Node $from ){
+        $this->_fromNode = $from;
+    }
+    protected function setTo( Node $to ){
+        $this->_toNode = $to;
+    }
+    
+    /**
+     *
+     * @param Node $from
+     * @param Node $to 
+     * @return \GraphKey
+     */
+    public static function assembleKey( Node $from, Node $to ){
+        return GraphKey::assemble( array( $from->_key->getRowKey(), $to->_key->getRowKey() ) );
+    }
+}
+
+?>

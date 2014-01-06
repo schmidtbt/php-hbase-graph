@@ -1,0 +1,13 @@
+<?php
+
+/**
+ * 
+ * @author Revan
+ */
+class GraphWalk {
+    
+    public static function walk( Node $start, Node $end, Edge $transition ){}
+    
+}
+
+?>

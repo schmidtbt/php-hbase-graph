@@ -1,0 +1,11 @@
+<?php
+
+/**
+ * Attempt to lockout a Node/Edge for exclusive processing
+ * @author Revan
+ */
+class AtmoicLockout {
+	
+}
+
+?>

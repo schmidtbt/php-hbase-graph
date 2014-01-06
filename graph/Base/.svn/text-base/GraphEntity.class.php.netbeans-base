@@ -1,0 +1,83 @@
+<?php
+
+/**
+ * 
+ * @author Revan
+ */
+abstract class GraphEntity {
+    /**
+     * @var GraphKey
+     */
+    protected $_key;
+    /**
+     *
+     * @var \HBase_Record
+     */
+    protected $_recordData;
+    /**
+     *
+     * @var GraphStorage
+     */
+    protected $_storage;
+    
+    
+    public function __construct( GraphKey $key ){
+        $this->setKey($key);
+        
+        $reader = $this->graphStorage()->read();
+        $output = $reader->read( $this->_key );
+        
+        if( ! $output instanceof HBase_Record ){
+            throw new GRAPH_STORAGE_EXCEPTION( 'While Attempting to Initialize: ' . get_called_class() );
+        }
+        
+        $this->setRecordData( $output );
+    }
+    public function setKey( GraphKey $key ){
+        $this->_key = $key;
+    }
+    /**
+     * @return GraphKey
+     */
+    public function getKey(){
+        return $this->_key;
+    }
+    
+    public static function gStorage( $className = NULL ){
+        if( is_null( $className ) ){
+            $className = __CLASS__;
+        }
+        return new GraphStorage( $className );
+    }
+    
+    protected function graphStorage(){
+        if( !isset( $this->_storage ) ){
+            $this->_storage = new GraphStorage( $this );
+        }
+        return $this->_storage;
+    }
+    protected function setRecordData( HBase_Record $record ){
+        $this->_recordData = $record;
+    }
+    
+    protected function addAttribute( $colFam, $col, $newValue ){
+        $create = $this->graphStorage()->create();
+        $create->createEntry( $this->_key, $colFam, $col, $newValue );
+    }
+    protected function modAttribute( $colFam, $col, $newValue ){
+        $updater = $this->graphStorage()->update();
+        $updater->add( $colFam, $col, $newValue );
+        $updater->update( $this->_key );
+    }
+    protected function incrementAttribute( $colFam, $col, $step = 1 ){
+        $updater = $this->graphStorage()->update();
+        $updater->increment( $this->_key, $colFam, $col, $step );
+    }
+    protected function getAttribute( $colFam, $col ){
+        return $this->_recordData->getColumn()->$colFam->$col;
+    }
+    protected function removeAttribute(){}
+    
+}
+
+?>
